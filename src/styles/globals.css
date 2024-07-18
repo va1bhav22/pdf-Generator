@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  /* background-color: #020617; */
+}
+@layer components {
+  .public-container {
+    @apply container mx-auto px-4 md:px-2 lg:px-5 2xl:px-6;
+  }
+}
