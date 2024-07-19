@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import MyDocument from "@/components/MyDocument";
 import PublicLayout from "@/components/layout/Public";
 import { RiDeleteBin6Line } from "react-icons/ri";
+
 const PDFViewer = dynamic(
   () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
   { ssr: false }
@@ -21,12 +22,13 @@ const PdfList = () => {
   const [pdfs, setPdfs] = useState<PdfData[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("highToLow");
-  // const [selectedPdf, setSelectedPdf] = useState<PdfData | null>(null);
+  const [selectedPdf, setSelectedPdf] = useState<PdfData | null>(null);
 
   useEffect(() => {
     const storedPdfs = JSON.parse(localStorage.getItem("pdfs") || "[]");
     setPdfs(storedPdfs);
   }, []);
+
   const filteredPdfs = pdfs
     .filter((pdf) =>
       pdf.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -42,13 +44,16 @@ const PdfList = () => {
         );
       }
     });
-  console.log(filteredPdfs);
 
   const handleDelete = (index: number) => {
     const updatedPdfs = [...pdfs];
     updatedPdfs.splice(index, 1);
     setPdfs(updatedPdfs);
     localStorage.setItem("pdfs", JSON.stringify(updatedPdfs));
+  };
+
+  const handleSelectPdf = (pdf: PdfData) => {
+    setSelectedPdf(pdf);
   };
 
   return (
@@ -64,30 +69,32 @@ const PdfList = () => {
           />
           <div>
             <select
-              name=""
-              id=""
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
-              className="bg-transparent text-white  border py-2 rounded-full  w-[200px] px-3 text-sm"
+              className="bg-transparent text-white border py-2 rounded-full w-[200px] px-3 text-sm"
             >
-              <option value="">High To Low</option>
-              <option value="">Low To High</option>
+              <option value="highToLow">High To Low</option>
+              <option value="lowToHigh">Low To High</option>
             </select>
           </div>
         </div>
         <div className="flex gap-5">
-          <div className=" w-1/4 flex flex-col gap-y-3">
-            {filteredPdfs?.map((pdf, i) => (
-              <div key={i} className="bg-white p-4 rounded-xl">
+          <div className="w-1/4 flex flex-col gap-y-3">
+            {filteredPdfs.map((pdf, i) => (
+              <div
+                key={i}
+                className="bg-white p-4 rounded-xl cursor-pointer"
+                onClick={() => handleSelectPdf(pdf)}
+              >
                 <div className="flex justify-center">
                   <img src="/pdf.png" alt="" className="h-24" />
                 </div>
                 <div className="flex flex-col gap-y-3">
-                  <p className="text-center text-xl">{pdf?.title}</p>
+                  <p className="text-center text-xl">{pdf.title}</p>
                   <div className="flex w-full justify-between">
                     <p className="text-xs">
                       {new Date(pdf.timestamp).toLocaleString() ||
-                        "Date Not  Define"}
+                        "Date Not Defined"}
                     </p>
                     <span
                       onClick={() => handleDelete(i)}
@@ -100,7 +107,13 @@ const PdfList = () => {
               </div>
             ))}
           </div>
-          <div className="border border-orange-500 w-[75%]"></div>
+          <div className="border w-[75%]">
+            {selectedPdf && (
+              <PDFViewer width="100%" height="600">
+                <MyDocument {...selectedPdf} />
+              </PDFViewer>
+            )}
+          </div>
         </div>
       </section>
     </PublicLayout>
