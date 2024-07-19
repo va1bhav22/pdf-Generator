@@ -71,7 +71,7 @@ const PdfList = () => {
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
-              className="bg-transparent text-white border py-2 rounded-full w-[200px] px-3 text-sm"
+              className="bg-transparent text-gray-400 border py-2 rounded-full w-[200px] px-3 text-sm"
             >
               <option value="highToLow">High To Low</option>
               <option value="lowToHigh">Low To High</option>
@@ -79,7 +79,7 @@ const PdfList = () => {
           </div>
         </div>
         <div className="flex gap-5">
-          <div className="w-1/4 flex flex-col gap-y-3">
+          <div className="w-1/4 h-[600px] scroll-bar-none overflow-y-auto flex flex-col gap-y-3">
             {filteredPdfs.map((pdf, i) => (
               <div
                 key={i}

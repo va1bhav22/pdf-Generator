@@ -10,3 +10,6 @@ body {
     @apply container mx-auto px-4 md:px-2 lg:px-5 2xl:px-6;
   }
 }
+.scroll-bar-none::-webkit-scrollbar {
+  display: none;
+}
