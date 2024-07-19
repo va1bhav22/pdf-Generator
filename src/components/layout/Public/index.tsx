@@ -17,7 +17,6 @@ const PublicLayout: React.FC<Props> = ({ children, title }) => {
       <main>
         <Navbar />
         {children}
-        <Footer />
       </main>
     </>
   );

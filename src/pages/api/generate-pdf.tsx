@@ -13,10 +13,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     />
   );
 
-  const pdfDoc = pdf([] as any); // Create a new PDF document instance
-  pdfDoc.updateContainer(document); // Add the React PDF document
-  const pdfBuffer = await pdfDoc.toBuffer(); // Convert to buffer
-
+  const pdfDoc = pdf([] as any);
+  pdfDoc.updateContainer(document);
+  const pdfBuffer = await pdfDoc.toBuffer();
   res.setHeader("Content-Disposition", "attachment; filename=generated.pdf");
   res.setHeader("Content-Type", "application/pdf");
   res.send(pdfBuffer);

@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <PublicLayout>
       <section className="public-container">
-        pdf Generator <PdfGenerator />
+        <PdfGenerator />
       </section>
     </PublicLayout>
   );
